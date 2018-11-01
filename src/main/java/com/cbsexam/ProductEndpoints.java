@@ -1,5 +1,6 @@
 package com.cbsexam;
 
+import cache.ProductCache;
 import com.google.gson.Gson;
 import controllers.ProductController;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import utils.Encryption;
 @Path("product")
 public class ProductEndpoints {
 
+  private static ProductCache productCache = new ProductCache();
+
   /**
    * @param idProduct
    * @return Responses
@@ -24,12 +27,13 @@ public class ProductEndpoints {
   @Path("/{idProduct}")
   public Response getProduct(@PathParam("idProduct") int idProduct) {
 
+
     // Call our controller-layer in order to get the order from the DB
-    Product product = ProductController.getProduct(idProduct);
+    Product products = ProductController.getProduct(idProduct);
 
     // TODO: Add Encryption to JSON :FIX
     // We convert the java object to json with GSON library imported in Maven
-    String json = new Gson().toJson(product);
+    String json = new Gson().toJson(products);
     json = Encryption.encryptDecryptXOR(json);
 
     // Return a response with status 200 and JSON as type
@@ -42,7 +46,9 @@ public class ProductEndpoints {
   public Response getProducts() {
 
     // Call our controller-layer in order to get the order from the DB
-    ArrayList<Product> products = ProductController.getProducts();
+    // mangler
+    ArrayList<Product> products = productCache.getProducts(true);
+
 
     // TODO: Add Encryption to JSON :FIX
     // We convert the java object to json with GSON library imported in Maven

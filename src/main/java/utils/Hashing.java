@@ -9,7 +9,7 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  // TODO: You should add a salt and make this secure
+  // TODO: You should add a salt and make this secure :FIX
   public static String md5(String rawString, byte[] salt) {
     try {
 
@@ -40,7 +40,8 @@ public final class Hashing {
     return null;
   }
 
-  public static String hashWithSalt(String hashsalt){
+  // Metode for at tilføje salt til password og hasher det med MD5 efter.
+  public static String md5HashWithSalt(String hashsalt){
     //Et bestemt salt. Skal laves random ved videreudvikling.
     String salt = "gniu454iun";
     // Ligger password sammen med salt til en ny string "hashed"
@@ -50,6 +51,17 @@ public final class Hashing {
 
   }
 
+// Metode for at tilføje salt til password og hasher det med sha efter.
+  public static String shaHashWithSalt(String hashsalt){
+    //Et bestemt salt. Skal laves random ved videreudvikling.
+    String salt = "gniu454iun";
+    // Ligger password sammen med salt til en ny string "hashed"
+    String hashed = hashsalt + salt;
+    // returnere password med salt efter, som sha metode hasher.
+    return (sha(hashed));
+
+  }
+// START PÅ RANDOM SALT. DER SKAL ÆNDRES I DATABASESTUKTUREN, SÅ SALT TILGÅR HVER BRUGER.
 //  public static byte[] setSalt() {
 //
 //    byte[] salt = new byte[20];
@@ -58,7 +70,7 @@ public final class Hashing {
 //    return salt;
 //  }
 
-  // TODO: You should add a salt and make this secure
+  // TODO: You should add a salt and make this secure :FIX
   public static String sha(String rawString) {
     try {
       // We load the hashing algoritm we wish to use.

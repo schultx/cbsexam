@@ -117,7 +117,7 @@ public class UserController {
             + user.getLastname()
             + "', '"
                 //Hasher password vha. MD5 metoden i Hashing klassen for at sikre password.
-            + Hashing.hashWithSalt(user.getPassword())
+            + Hashing.shaHashWithSalt(user.getPassword())
             + "', '"
             + user.getEmail()
             + "', "

@@ -110,4 +110,27 @@ public class DatabaseController {
     // Return the resultset which at this point will be null
     return result;
   }
+
+
+  // bruges til at kører update og delete, hvor den bare gå ind og henter sql statment.
+  public boolean updateDelete(String sql) {
+
+    // Check that we have connection
+    if (connection == null)
+      connection = getConnection();
+
+    try {
+      PreparedStatement updateDelete = connection.prepareStatement(sql);
+      updateDelete.executeUpdate();
+      return true;
+
+    } catch (SQLException e) {
+      System.out.println(e.getMessage());
+      return false;
+    }
+
+
+
+
+  }
 }

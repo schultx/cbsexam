@@ -31,7 +31,7 @@ public class OrderCache {
         // Hvis listen er tom kan vi tjekke for ny order.
         if (forceUpdate
                 || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
-                || this.orders.isEmpty()) {
+                || this.orders == null) {
 
             // Get order fra controller, siden vi vil opdaterer.
             ArrayList<Order> orders = OrderController.getOrders();

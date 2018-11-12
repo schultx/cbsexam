@@ -3,7 +3,12 @@ package controllers;
 import java.sql.*;
 import java.util.ArrayList;
 
+import cache.UserCache;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import model.User;
+import org.apache.solr.common.util.Hash;
 import utils.Hashing;
 import utils.Log;
 
@@ -212,4 +217,40 @@ public class UserController {
             return false;
         }
     }
+
+    public static String login(User userLogin) {
+
+        //write to log
+        Log.writeLog(UserController.class.getName(), userLogin, "Logging in a user", 0);
+
+        // Check for DB Connection
+        if (dbCon == null) {
+            dbCon = new DatabaseController();
+        }
+
+        UserCache userCache = new UserCache();
+        ArrayList<User> users = userCache.getUsers(false);
+
+        Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
+
+        for (User user : users) {
+            if (
+                    user.getEmail().equals(userLogin.getEmail()) && user.getPassword().equals(Hashing.shaHashWithSalt(userLogin.getPassword()))) {
+
+                try {
+                    Algorithm algorithm = Algorithm.HMAC256("secret_key");
+                    String token = JWT.create().withClaim("hejduder",timeStamp).sign(algorithm);
+                    return token;
+                } catch (JWTCreationException ex) {
+                    System.out.println(ex.getMessage());
+
+                }
+
+
+            }
+        }
+        return null;
+
+    }
+
 }

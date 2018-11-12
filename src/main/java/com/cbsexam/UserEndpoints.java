@@ -6,6 +6,7 @@ import controllers.UserController;
 
 import java.util.ArrayList;
 import javax.annotation.PostConstruct;
+import javax.jws.soap.SOAPBinding;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -36,12 +37,13 @@ public class UserEndpoints {
         json = Encryption.encryptDecryptXOR(json);
 
         // Return the user with the status code 200
-        // TODO: What should happen if something breaks down?
-        // Return the data to the user
+        // TODO: What should happen if something breaks down? :FIX
+        // if statement der tjekke at user ikke er null
         if (user != null) {
             // Return a response with status 200 and JSON as type
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
         } else {
+            // laver en fejl 400, hvis den ikke kan hente brugeren
             return Response.status(400).entity("Could not get user").build();
         }
     }
@@ -96,15 +98,21 @@ public class UserEndpoints {
     @POST
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response loginUser(String body) {
+    public Response loginUser(String userLogin) {
 
-        User Userlogin = new Gson().fromJson(body, User.class);
 
-        ArrayList<User> users = userCache.getUsers(false);
+        User userlogin = new Gson().fromJson(userLogin, User.class);
+
+        String token = UserController.login(userlogin);
 
 
         // Return a response with status 200 and JSON as type
-        return Response.status(400).entity("Endpoint not implemented yet").build();
+        if (token != null) {
+            // Return a response with status 200 and JSON as type
+            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("You have login \n You have the token:" + token).build();
+        } else {
+            return Response.status(400).entity("Could not login").build();
+        }
     }
 
     // TODO: Make the system able to delete users :FIX

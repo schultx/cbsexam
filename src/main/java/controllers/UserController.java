@@ -241,7 +241,7 @@ public class UserController {
                     user.getEmail().equals(userLogin.getEmail()) && user.getPassword().equals(Hashing.shaHashWithSalt(userLogin.getPassword()))) {
 
                 try {
-                    Algorithm algorithm = Algorithm.HMAC256("secret_key");
+                    Algorithm algorithm = Algorithm.HMAC256("tester");
                     String token = JWT.create().withIssuer("auth0").withClaim("hejduder",timeStamp).withClaim("Jwt_test", user.getId()).sign(algorithm);
                     return token;
                 } catch (JWTCreationException ex) {
@@ -256,7 +256,7 @@ public class UserController {
 
     }
 
-    public static DecodedJWT vertifyToken (String userToken) {
+    public static DecodedJWT verifyToken (String userToken) {
 
         //write to log
         Log.writeLog(UserController.class.getName(), userToken, "Vertifying a token", 0);

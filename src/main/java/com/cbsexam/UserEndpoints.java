@@ -1,6 +1,7 @@
 package com.cbsexam;
 
 import cache.UserCache;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.google.gson.Gson;
 import controllers.UserController;
 
@@ -119,13 +120,14 @@ public class UserEndpoints {
     @DELETE
     @Path("/delete/{userId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@PathParam("userId") int id) {
+    public Response deleteUser(@PathParam("userId") int id, String body) {
 
-        Boolean delete = UserController.delete(id);
+        DecodedJWT token = UserController.vertifyToken(body);
 
-        userCache.getUsers(true);
+        Boolean deleteUser = UserController.delete(token.getClaim("Jwt_test").asInt());
 
-        if (delete) {
+        if (deleteUser) {
+            userCache.getUsers(true);
             // Return a response with status 200 and JSON as type
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Delete user with id " + id).build();
         } else {

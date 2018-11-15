@@ -5,8 +5,11 @@ import java.util.ArrayList;
 
 import cache.UserCache;
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import model.User;
 import org.apache.solr.common.util.Hash;
 import utils.Hashing;
@@ -45,7 +48,7 @@ public class UserController {
                                 rs.getString("password"),
                                 rs.getString("email"));
 
-                // return the create object
+                // return the  object
                 return user;
             } else {
                 System.out.println("No user found");
@@ -239,7 +242,7 @@ public class UserController {
 
                 try {
                     Algorithm algorithm = Algorithm.HMAC256("secret_key");
-                    String token = JWT.create().withClaim("hejduder",timeStamp).sign(algorithm);
+                    String token = JWT.create().withIssuer("auth0").withClaim("hejduder",timeStamp).withClaim("Jwt_test", user.getId()).sign(algorithm);
                     return token;
                 } catch (JWTCreationException ex) {
                     System.out.println(ex.getMessage());
@@ -251,6 +254,28 @@ public class UserController {
         }
         return null;
 
+    }
+
+    public static DecodedJWT vertifyToken (String userToken) {
+
+        //write to log
+        Log.writeLog(UserController.class.getName(), userToken, "Vertifying a token", 0);
+
+
+        String token = userToken;
+        try {
+            Algorithm algorithm = Algorithm.HMAC256("tester");
+            JWTVerifier verifier = JWT.require(algorithm)
+                    .withIssuer("auth0")
+                    .build(); //Reusable verifier instance
+            DecodedJWT jwt = verifier.verify(token);
+            return jwt;
+
+        } catch (JWTVerificationException ex){
+           ex.getMessage();
+
+        }
+        return null;
     }
 
 }

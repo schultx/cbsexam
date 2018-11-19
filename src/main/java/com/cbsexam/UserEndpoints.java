@@ -138,20 +138,26 @@ public class UserEndpoints {
 
     // TODO: Make the system able to update users
     @POST
-    @Path("/update/{userId}")
+    @Path("/update/{userId}/{token}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateUser(@PathParam("userId") int id, String body) {
+    // bruger to params for at update
+    public Response updateUser(@PathParam("userId") int id, @PathParam("token") String token, String body) {
 
-        // converts user from json
+        // converts user from gson to Json
         User user = new Gson().fromJson(body, User.class);
 
-        Boolean update = UserController.update(user, id);
+        // decoreder token  og verify token
+        DecodedJWT jwt = UserController.verifyToken(token);
+
+
+        Boolean updateUser = UserController.update(user, jwt.getClaim("Jwt_test").asInt());
+
 
         // Update cashe because we update user
         userCache.getUsers(true);
 
         // Return a response with status 200 and JSON as type
-        if (update) {
+        if (updateUser) {
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Update user with id " + id).build();
         } else {
             return Response.status(400).entity("Could not update user").build();

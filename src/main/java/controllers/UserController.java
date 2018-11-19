@@ -208,12 +208,12 @@ public class UserController {
         }
 
         if (user != null) {
-            // prøve = ?  og slet "
-            dbCon.updateDelete("UPDATE user SET first_name '" + user.getFirstname() +
+            // Update bruger oplysning i dette SQL statement
+            dbCon.updateDelete("UPDATE user SET first_name = '" + user.getFirstname() +
                     "', last_name = '" + user.getLastname() +
                     "', email ='" + user.getEmail() +
-                    "', password ='" + user.getPassword() +
-                    "'where id=" + id);
+                    "', password ='" + Hashing.shaHashWithSalt(user.getPassword()) +
+                    "' where id=" + id);
             return true;
 
         } else {

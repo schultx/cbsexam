@@ -35,7 +35,7 @@ public class OrderController {
     try {
       if (rs.next()) {
 
-        // Perhaps we could optimize things a bit here and get rid of nested queries.
+        //TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
         ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
         Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
@@ -136,7 +136,7 @@ public class OrderController {
     Connection connection = DatabaseController.getConnection();
 
 
-        // Har sat order ind i try, da det ikke hjælper at vi kun kører dem u
+        // Har sat order ind i try, da det ikke hjælper at vi kun kører dem delvist
     try {
       // Sætter auto commit til false, fordi vi vil have det hele og ikke kun noget af en order.
       connection.setAutoCommit(false);

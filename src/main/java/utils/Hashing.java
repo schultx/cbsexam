@@ -61,7 +61,7 @@ public final class Hashing {
     return (sha(hashed));
 
   }
-// START PÅ RANDOM SALT. DER SKAL ÆNDRES I DATABASESTUKTUREN, SÅ SALT TILGÅR HVER BRUGER.
+// START PÅ RANDOM SALT. DER SKAL ÆNDRES I DATABASESTUKTUREN, SÅ SALT TILGÅR HVER BRUGER unikt.
 //  public static byte[] setSalt() {
 //
 //    byte[] salt = new byte[20];

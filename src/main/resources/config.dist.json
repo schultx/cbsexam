@@ -1,28 +1,11 @@
-{
-  "DATABASE_HOST" : "localhost",
-  "DATABASE_PORT" : 3306,
-  "DATABASE_USERNAME" : "root",
-  "DATABASE_PASSWORD" : "1234",
-  "DATABASE_NAME" : "cbsexam",
-  "ENCRYPTION" : false,
-  "SOLR_HOST" : "localhost",
-  "SOLR_PORT" : 8983,
-  "SOLR_PATH" : "solr",
-  "SOLR_CORE" : "cbscore",
-  "PRODUCT_TTL" : 3600,
-  "ORDER_TTL" : 3600,
-  "USER_TTL" : 3600,
-  "ENCRYPTION_KEY" : "24JNNf94f998nvfnfnei3l"
-}
-
 //{
-//  "DATABASE_HOST" : "172.31.47.199",
+//  "DATABASE_HOST" : "localhost",
 //  "DATABASE_PORT" : 3306,
-//  "DATABASE_USERNAME" : "mathias",
-//  "DATABASE_PASSWORD" : "hej123",
+//  "DATABASE_USERNAME" : "root",
+//  "DATABASE_PASSWORD" : "1234",
 //  "DATABASE_NAME" : "cbsexam",
-//  "ENCRYPTION" : true,
-//  "SOLR_HOST" : "172.31.24.217",
+//  "ENCRYPTION" : false,
+//  "SOLR_HOST" : "localhost",
 //  "SOLR_PORT" : 8983,
 //  "SOLR_PATH" : "solr",
 //  "SOLR_CORE" : "cbscore",
@@ -31,3 +14,20 @@
 //  "USER_TTL" : 3600,
 //  "ENCRYPTION_KEY" : "24JNNf94f998nvfnfnei3l"
 //}
+
+{
+  "DATABASE_HOST" : "172.31.47.199",
+  "DATABASE_PORT" : 3306,
+  "DATABASE_USERNAME" : "mathias",
+  "DATABASE_PASSWORD" : "hej123",
+  "DATABASE_NAME" : "cbsexam",
+  "ENCRYPTION" : true,
+  "SOLR_HOST" : "172.31.24.217",
+  "SOLR_PORT" : 8983,
+  "SOLR_PATH" : "solr",
+  "SOLR_CORE" : "cbscore",
+  "PRODUCT_TTL" : 3600,
+  "ORDER_TTL" : 3600,
+  "USER_TTL" : 3600,
+  "ENCRYPTION_KEY" : "24JNNf94f998nvfnfnei3l"
+}

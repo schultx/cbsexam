@@ -36,16 +36,17 @@ public class UserEndpoints {
         // TODO: Add Encryption to JSON : FIX
         // Convert the user object to json in order to return the object
         String json = new Gson().toJson(user);
+        // Encryption of json with XOR
         json = Encryption.encryptDecryptXOR(json);
 
         // Return the user with the status code 200
         // TODO: What should happen if something breaks down? :FIX
-        // if statement der tjekke at user ikke er null
+        // if statement der tjekke at user ikke er null og smider fejl besked ved noget der er galt.
         if (user != null) {
             // Return a response with status 200 and JSON as type
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
         } else {
-            // laver en fejl 400, hvis den ikke kan hente brugeren
+            // Laver en fejl 400, hvis den ikke kan henter brugeren
             return Response.status(400).entity("Could not get user").build();
         }
     }
@@ -67,6 +68,7 @@ public class UserEndpoints {
         // TODO: Add Encryption to JSON :fix
         // Transfer users to json in order to return it to the user
         String json = new Gson().toJson(users);
+        // Encryption of json with XOR
         json = Encryption.encryptDecryptXOR(json);
 
         // Return the users with the status code 200
@@ -105,8 +107,8 @@ public class UserEndpoints {
 
         User userlogin = new Gson().fromJson(userLogin, User.class);
 
+        // Kører login metode i UserControlleren og sætter token ind i token under.
         String token = UserController.login(userlogin);
-
 
         // Return a response with status 200 and JSON as type
         if (token != null) {
@@ -123,18 +125,22 @@ public class UserEndpoints {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteUser(@PathParam("userId") int id, String body) {
 
-            DecodedJWT token = UserController.verifyToken(body);
-            Boolean deleteUser = UserController.delete(token.getClaim("Jwt_test").asInt());
+        // henter token fra verifyToken metode
+        DecodedJWT token = UserController.verifyToken(body);
+        // Kører delete metode og deleteUser bliver true, hvis den er kørt
+        Boolean deleteUser = UserController.delete(token.getClaim("Jwt_test").asInt());
 
-
+        // if deleteUser er true opdaterer cachen
         if (deleteUser) {
             userCache.getUsers(true);
             // Return a response with status 200 and JSON as type
+            // besked om hvilken bruger der er slettet.
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Delete user with id " + id).build();
         } else {
             return Response.status(400).entity("Could not create user").build();
         }
     }
+
 
     // TODO: Make the system able to update users :FIX
     @POST
@@ -146,24 +152,20 @@ public class UserEndpoints {
         // converts user from gson to Json
         User user = new Gson().fromJson(body, User.class);
 
-        // decoreder token  og verify token
+        // henter token fra verifyToken metoden
         DecodedJWT jwt = UserController.verifyToken(token);
 
-
+        // opdatere user ud fra user og token. Giver en true eller false tilbage
         Boolean updateUser = UserController.update(user, jwt.getClaim("Jwt_test").asInt());
 
-
-        // Update cashe because we update user
-        userCache.getUsers(true);
-
-        // Return a response with status 200 and JSON as type
+        // tjekker at brugeren blev opdateret ellers fejlbesked
         if (updateUser) {
+            // Update cashe because we update user
+            userCache.getUsers(true);
+            // Return a response with status 200 and JSON as type
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Update user with id " + id).build();
         } else {
             return Response.status(400).entity("Could not update user").build();
-
         }
-
-
     }
 }

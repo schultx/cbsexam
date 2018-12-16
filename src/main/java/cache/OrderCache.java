@@ -7,7 +7,7 @@ import utils.Config;
 import java.util.ArrayList;
 
 // Denne klasse bygger samme teknik som ProductCache.
-//TODO: Build this cache and use it. : igang
+//TODO: Build this cache and use it. : FIX
 public class OrderCache {
 
 

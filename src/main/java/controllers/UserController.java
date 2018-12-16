@@ -46,7 +46,8 @@ public class UserController {
                                 rs.getString("first_name"),
                                 rs.getString("last_name"),
                                 rs.getString("password"),
-                                rs.getString("email"));
+                                rs.getString("email"),
+                                rs.getLong("created_at"));
 
                 // return the  object
                 return user;
@@ -89,7 +90,9 @@ public class UserController {
                                 rs.getString("first_name"),
                                 rs.getString("last_name"),
                                 rs.getString("password"),
-                                rs.getString("email"));
+                                rs.getString("email"),
+                                rs.getLong("created_at"));
+
 
                 // Add element to list
                 users.add(user);
@@ -185,6 +188,7 @@ public class UserController {
             dbCon = new DatabaseController();
         }
 
+        // objekt af user ud fra user id
         User user = UserController.getUser(id);
 
         if (user != null) {
@@ -208,7 +212,7 @@ public class UserController {
         }
 
         if (user != null) {
-            // Update bruger oplysning i dette SQL statement
+            // Update bruger oplysning i dette SQL statement ud fra  updateDelete i DatabaseCon.
             dbCon.updateDelete("UPDATE user SET first_name = '" + user.getFirstname() +
                     "', last_name = '" + user.getLastname() +
                     "', email ='" + user.getEmail() +
@@ -231,32 +235,37 @@ public class UserController {
             dbCon = new DatabaseController();
         }
 
+        // Nyt objekt af user cache
         UserCache userCache = new UserCache();
+
+        // Arraliste med alle brugerne ud fra user cache
         ArrayList<User> users = userCache.getUsers(false);
 
+        //Timestamp
         Timestamp timeStamp = new Timestamp(System.currentTimeMillis());
 
+        // for loop af brugerne i arraylisten
         for (User user : users) {
+            //if statement ud fra email og password.
             if (
                     user.getEmail().equals(userLogin.getEmail()) && user.getPassword().equals(Hashing.shaHashWithSalt(userLogin.getPassword()))) {
 
+                // try statement for at lave en token til brugeren ud fra name herunder, timestamp og id
                 try {
+                    // Sætter algorithm til HMA256 med claim tester og Issuer auth0
                     Algorithm algorithm = Algorithm.HMAC256("tester");
-                    String token = JWT.create().withIssuer("auth0").withClaim("hejduder",timeStamp).withClaim("Jwt_test", user.getId()).sign(algorithm);
+                    String token = JWT.create().withIssuer("auth0").withClaim("hejduder", timeStamp).withClaim("Jwt_test", user.getId()).sign(algorithm);
+                    // returnere token
                     return token;
                 } catch (JWTCreationException ex) {
                     System.out.println(ex.getMessage());
-
                 }
-
-
             }
         }
         return null;
-
     }
 
-    public static DecodedJWT verifyToken (String userToken) {
+    public static DecodedJWT verifyToken(String userToken) {
 
         //write to log
         Log.writeLog(UserController.class.getName(), userToken, "Vertifying a token", 0);
@@ -264,15 +273,19 @@ public class UserController {
 
         String token = userToken;
         try {
+            // Sætter algorithm til HMA256 med claim tester og Issuer auth0
             Algorithm algorithm = Algorithm.HMAC256("tester");
             JWTVerifier verifier = JWT.require(algorithm)
                     .withIssuer("auth0")
-                    .build(); //Reusable verifier instance
+                    .build();
+            //Reusable verifier instance.
+            // Verifier token ud fra hvor den bliver kaldt fx update.
             DecodedJWT jwt = verifier.verify(token);
             return jwt;
 
-        } catch (JWTVerificationException ex){
-           ex.getMessage();
+            // catcher fejlen og printer den, hvis det går galt
+        } catch (JWTVerificationException ex) {
+            System.out.println(ex.getMessage());
 
         }
         return null;

@@ -13,7 +13,8 @@ public final class Hashing {
   public static String md5(String rawString, byte[] salt) {
     try {
 
-      // We load the hashing algoritm we wish to use. Ved videre udvikling vil man se på PBKDF2, BCrypt, and SCrypt i stedet for MD5.
+      // We load the hashing algoritm we wish to use. Ved videre udvikling vil man se på
+      // PBKDF2, BCrypt, and SCrypt i stedet for MD5.
       // Deres hashing er mere sikkert.
       MessageDigest md = MessageDigest.getInstance("MD5");
 
@@ -73,7 +74,8 @@ public final class Hashing {
   // TODO: You should add a salt and make this secure :FIX
   public static String sha(String rawString) {
     try {
-      // We load the hashing algoritm we wish to use.
+      // We load the hashing algoritm we wish to use. Ved videre udvikling vil man
+      // se på PBKDF2, BCrypt, and SCrypt i stedet for
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
       // We convert to byte array

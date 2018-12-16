@@ -112,13 +112,16 @@ public class DatabaseController {
   }
 
 
-  // bruges til at kører update og delete, hvor den bare gå ind og henter sql statment.
+  // bruges til at kører update og delete,
+
   public boolean updateDelete(String sql) {
 
     // Check that we have connection
     if (connection == null)
       connection = getConnection();
 
+    // Forbinder til databasen.
+    // Kører sql statment fra UserControlleren enten update eller delete.
     try {
       PreparedStatement updateDelete = connection.prepareStatement(sql);
       updateDelete.executeUpdate();

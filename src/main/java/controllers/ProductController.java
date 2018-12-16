@@ -97,13 +97,15 @@ public class ProductController {
       dbCon = new DatabaseController();
     }
 
-    // TODO: Use caching layer : igang
+    // TODO: Use caching layer : FIX
     String sql = "SELECT * FROM product";
 
+    // Do the query and initialyze an empty list for use if we don't get results
     ResultSet rs = dbCon.query(sql);
     ArrayList<Product> products = new ArrayList<Product>();
 
     try {
+      // kører result set igennem og tilføjer til Arraylisten Produkt
       while (rs.next()) {
         Product product =
             new Product(
@@ -115,12 +117,12 @@ public class ProductController {
                 rs.getString("description"),
                 rs.getInt("stock"));
 
+        // tilføjer projekt
         products.add(product);
       }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
     }
-
     return products;
   }
 

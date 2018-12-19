@@ -91,6 +91,8 @@ public class UserEndpoints {
 
         // Return the data to the user
         if (createUser != null) {
+            // force opdatere user cachen
+            userCache.getUsers(true);
             // Return a response with status 200 and JSON as type
             return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
         } else {
@@ -104,7 +106,7 @@ public class UserEndpoints {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response loginUser(String userLogin) {
 
-
+        // user converts json to gson
         User userlogin = new Gson().fromJson(userLogin, User.class);
 
         // Kører login metode i UserControlleren og sætter token ind i token under.

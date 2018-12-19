@@ -41,12 +41,15 @@ public class OrderController {
         // Creating an empty object for all the results
         Order order = null;
 
+        // if statement for result set for bestemt id
         try {
             if (rs.next()) {
-                //TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
+                //TODO: Perhaps we could optimize things a bit here and get rid of nested queries. :FIX
 
+                // Arraylist for Line Item
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
 
+                // opsætter information til en order ud fra et objekt af user
                 User user = new User(
                         rs.getInt("id"),
                         rs.getString("first_name"),
@@ -55,7 +58,7 @@ public class OrderController {
                         rs.getString("email"),
                         rs.getLong("created_at"));
 
-
+                // opsætter information til en order ud fra et objekt af address
                 Address billingAddress =
                         new Address(
                                 rs.getInt("billing_address_id"),
@@ -64,6 +67,7 @@ public class OrderController {
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
+                // opsætter information til en order ud fra et objekt af address
                 Address shippingAddress =
                         new Address(
                                 rs.getInt("billing_address_id"),
@@ -72,7 +76,7 @@ public class OrderController {
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
-                // Creating an object instance for order from the data from the database
+                // opsætter information til en order ud fra et objekt af order
                 order =
                         new Order(
                                 rs.getInt("id"),
@@ -83,11 +87,14 @@ public class OrderController {
                                 rs.getFloat("order_total"),
                                 rs.getLong("created_at"),
                                 rs.getLong("updated_at"));
+
                 // Returns the order that have been build.
                 return order;
+                // ellers print at der ikke var nogle ordre
             } else {
                 System.out.println("No order was found");
             }
+            // catcher fejl
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -162,12 +169,15 @@ public class OrderController {
         ResultSet rs = dbCon.query(sql);
         ArrayList<Order> orders = new ArrayList<>();
 
+        // while loop for hvert skridt i result set
         try {
             while (rs.next()) {
-                //TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
+                //TODO: Perhaps we could optimize things a bit here and get rid of nested queries. :FIX
 
+                // Arraylist for Line Item
                 ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
 
+                // opsætter information til en bruger ud fra et objekt af user
                 User user = new User(
                         rs.getInt("id"),
                         rs.getString("first_name"),
@@ -176,7 +186,7 @@ public class OrderController {
                         rs.getString("email"),
                         rs.getLong("created_at"));
 
-
+                // opsætter information til en billingAddress ud fra et objekt af address
                 Address billingAddress =
                         new Address(
                                 rs.getInt("billing_address_id"),
@@ -185,6 +195,7 @@ public class OrderController {
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
 
+                // opsætter information til en shippingAddress ud fra et objekt af address
                 Address shippingAddress =
                         new Address(
                                 rs.getInt("billing_address_id"),
@@ -192,6 +203,8 @@ public class OrderController {
                                 rs.getString("billing"),
                                 rs.getString("city"),
                                 rs.getString("zipcode"));
+
+                // opsætter information til en order ud fra et objekt af address
                 Order order =
                         new Order(
                                 rs.getInt("id"),
@@ -202,11 +215,14 @@ public class OrderController {
                                 rs.getFloat("order_total"),
                                 rs.getLong("created_at"),
                                 rs.getLong("updated_at"));
+                // tilføjer order
                 orders.add(order);
             }
+            // catcher fejl
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        // return null
         return orders;
     }
 
@@ -324,6 +340,7 @@ public class OrderController {
         } catch (SQLException ex) {
 
             try {
+                // hvis det ikke lykkes, så laver den et rollback til det den var før.
                 connection.rollback();
                 System.out.println("Rollback");
             } catch (SQLException ex3) {

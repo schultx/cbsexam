@@ -19,6 +19,7 @@ public class ReviewEndpoints {
    */
   @GET
   @Path("/title/{title}")
+  // lav så man kan søge på andet end title
   public Response search(@PathParam("title") String reviewTitle) {
 
     // Call our controller-layer in order to get the order from the DB

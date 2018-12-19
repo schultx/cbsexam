@@ -5,7 +5,7 @@
   "DATABASE_USERNAME" : "mathias",
   "DATABASE_PASSWORD" : "hej1234",
   "DATABASE_NAME" : "cbsexam",
-  "ENCRYPTION" : false,
+  "ENCRYPTION" : true,
   "SOLR_HOST" : "172.31.24.217",
   "SOLR_PORT" : 8983,
   "SOLR_PATH" : "solr",

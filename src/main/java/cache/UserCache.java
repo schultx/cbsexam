@@ -7,7 +7,7 @@ import utils.Config;
 import java.util.ArrayList;
 
 // Denne klasse bygger på sammen teknik som OrderCache og ProductCache.
-//TODO: Build this cache and use it. : igang
+//TODO: Build this cache and use it. : FIX
 public class UserCache {
 
     // List of user
@@ -27,7 +27,7 @@ public class UserCache {
         // If we whis to clear cache, we can set force update.
         // Otherwise we look at the age of the cache and figure out if we should update.
         // If the list is empty we also check for new products
-        if (forceUpdate || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
+        if (forceUpdate || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
                 || this.users == null)  {
 
             // Get user from controller, since we wish to update.

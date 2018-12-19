@@ -130,16 +130,21 @@ public class UserEndpoints {
         // henter token fra verifyToken metode
         DecodedJWT token = UserController.verifyToken(body);
         // Kører delete metode og deleteUser bliver true, hvis den er kørt
-        Boolean deleteUser = UserController.delete(token.getClaim("Jwt_test").asInt());
+        if (token.getClaim("Jwt_test").asInt() == id) {
+            Boolean deleteUser = UserController.delete(token.getClaim("Jwt_test").asInt());
 
-        // if deleteUser er true opdaterer cachen
-        if (deleteUser) {
-            userCache.getUsers(true);
-            // Return a response with status 200 and JSON as type
-            // besked om hvilken bruger der er slettet.
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Delete user with id " + id).build();
+            // if deleteUser er true opdaterer cachen
+            if (deleteUser) {
+                userCache.getUsers(true);
+                // Return a response with status 200 and JSON as type
+                // besked om hvilken bruger der er slettet.
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Delete user with id " + id).build();
+            } else {
+                return Response.status(400).entity("Could not delete user").build();
+            }
         } else {
-            return Response.status(400).entity("Could not create user").build();
+            return Response.status(400).entity("It's not possible to delete other users").build();
+
         }
     }
 
@@ -158,16 +163,21 @@ public class UserEndpoints {
         DecodedJWT jwt = UserController.verifyToken(token);
 
         // opdatere user ud fra user og token. Giver en true eller false tilbage
-        Boolean updateUser = UserController.update(user, jwt.getClaim("Jwt_test").asInt());
+        if (jwt.getClaim("Jwt_test").asInt() == id) {
+            Boolean updateUser = UserController.update(user, jwt.getClaim("Jwt_test").asInt());
 
-        // tjekker at brugeren blev opdateret ellers fejlbesked
-        if (updateUser) {
-            // Update cashe because we update user
-            userCache.getUsers(true);
-            // Return a response with status 200 and JSON as type
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Update user with id " + id).build();
+            // tjekker at brugeren blev opdateret ellers fejlbesked
+            if (updateUser) {
+                // Update cashe because we update user
+                userCache.getUsers(true);
+                // Return a response with status 200 and JSON as type
+                return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("Update user with id " + id).build();
+            } else {
+                return Response.status(400).entity("Could not update user").build();
+            }
         } else {
-            return Response.status(400).entity("Could not update user").build();
+            return Response.status(400).entity("It's not possible to update other users").build();
         }
+
     }
 }

@@ -8,14 +8,14 @@ public final class Encryption {
     if (Config.getEncryption()) {
 
       // The key is predefined and hidden in code
-      // TODO: Create a more complex code and store it somewhere better : mangler beskrivelse
-      // Kode er gemt et bedre sted
+      // TODO: Create a more complex code and store it somewhere better :FIX
+      // Kode er gemt i config.json, da den ikke kan læse i war filen.
       char[] key = Config.getEncryptionKey();
 
       // Stringbuilder enables you to play around with strings and make useful stuff
       StringBuilder thisIsEncrypted = new StringBuilder();
 
-      // TODO: This is where the magic of XOR is happening. Are you able to explain what is going on?
+      // TODO: This is where the magic of XOR is happening. Are you able to explain what is going on? :FIX
       // Dette er forklaret dybbere i rapporten, men kort sagt så bliver alt lavet om til binær.
       // Det bliver en plaintext i binær som ligges sammen med en secret key og giver en ciphertext.
       // Denne kan dekodes ved at ligge den secret key til ciphertext, som giver plaintext.

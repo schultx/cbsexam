@@ -30,7 +30,7 @@ public class OrderCache {
         // Ellers kigger man på alderen af cashen og find ud af om man vil opdaterer
         // Hvis listen er tom kan vi tjekke for ny order.
         if (forceUpdate
-                || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
+                || ((this.created + this.ttl) <= (System.currentTimeMillis() / 1000L))
                 || this.orders == null) {
 
             // Get order fra controller, siden vi vil opdaterer.

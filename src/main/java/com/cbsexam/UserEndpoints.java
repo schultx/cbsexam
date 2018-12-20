@@ -115,7 +115,7 @@ public class UserEndpoints {
         // Return a response with status 200 and JSON as type
         if (token != null) {
             // Return a response with status 200 and JSON as type
-            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("You have login \n You have the token:" + token).build();
+            return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
         } else {
             return Response.status(400).entity("Could not login").build();
         }
@@ -123,9 +123,9 @@ public class UserEndpoints {
 
     // TODO: Make the system able to delete users :FIX
     @DELETE
-    @Path("/delete/{userId}")
+    @Path("/delete/{idUser}/{token}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteUser(@PathParam("userId") int id, String body) {
+    public Response deleteUser(@PathParam("idUser") int id, @PathParam("token") String body) {
 
         // henter token fra verifyToken metode
         DecodedJWT token = UserController.verifyToken(body);
@@ -144,7 +144,6 @@ public class UserEndpoints {
             }
         } else {
             return Response.status(400).entity("It's not possible to delete other users").build();
-
         }
     }
 
